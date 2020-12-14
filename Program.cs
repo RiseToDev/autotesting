@@ -80,6 +80,7 @@ namespace auto_tests
 
 			int numberForFourthItaration = 0;
 			int errorCounter = 0;
+			int totalCountOfTests = 0;
 
 			for (int i = 0; i < 5; i++) {
 
@@ -158,7 +159,7 @@ namespace auto_tests
 								trueResult = i == 4 ? Math.Round((double)trueResult * numberForFourthItaration) : Math.Round((double)trueResult * numberForFourthItaration, numberPrecision);
 							}
 
-							double finalCalcRes = i == 4 ? Math.Round(Double.Parse(calculatorResult.Replace('.', ','))): Math.Round(Double.Parse(calculatorResult.Replace('.', ',')), numberPrecision); ;
+							double finalCalcRes = i == 4 ? Math.Round(Double.Parse(calculatorResult.Replace('.', ','))): Math.Round(Double.Parse(calculatorResult.Replace('.', ',')), numberPrecision);
 							bool isEqual = finalCalcRes == trueResult;
 
 
@@ -175,7 +176,7 @@ namespace auto_tests
 								//	btn1.Key + " " + operation.Key + " " + secondNumber + (i == 4 ? (" " + "*" + " " + numberForFourthItaration + " ") : "") + " = " + trueResult.ToString()
 								//	+ "\n-------------------------------------------------------------------------------");
 							}
-
+							totalCountOfTests++;
 							Console.WriteLine(
 									isEqual
 									+ "\t" +
@@ -197,6 +198,7 @@ namespace auto_tests
 			{
 				Console.WriteLine("Errors have been found - " + errorCounter);
 			}
+			Console.WriteLine("Total count of tests - " + totalCountOfTests);
 
 
 			Console.ReadLine();
