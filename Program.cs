@@ -78,7 +78,10 @@ namespace auto_tests
 
 			const int numberPrecision = 3;
 
-			for (int i = 0; i < 4; i++) {
+			int numberForFourthItaration = 0;
+			int errorCounter = 0;
+
+			for (int i = 0; i < 5; i++) {
 
 				foreach (var operation in functions_dic)
 				{
@@ -86,6 +89,11 @@ namespace auto_tests
 					{
 						foreach (var btn2 in num_pad_dic)
 						{
+							if (i == 4)
+							{
+								numberForFourthItaration =  new Random().Next(0, 9);
+							}
+
 							if (operation.Key == "/" && btn2.Key == 0) { continue; }
 							SendMessage(clear, BTN_CLICK, 0, 0);
 							SendMessage(btn1.Value, BTN_CLICK, 0, 0);
@@ -101,20 +109,30 @@ namespace auto_tests
 								SendMessage(dot, BTN_CLICK, 0, 0);
 								SendMessage(btn1.Value, BTN_CLICK, 0, 0);
 							}
+
+							if (i == 4)
+							{
+								SendMessage(equale, BTN_CLICK, 0, 0);
+								SendMessage(functions_dic["*"], BTN_CLICK, 0, 0);
+								SendMessage(num_pad_dic[numberForFourthItaration], BTN_CLICK, 0, 0);
+							}
+
 							SendMessage(equale, BTN_CLICK, 0, 0);
+
+
 
 							var calculatorResult = GetControlText((IntPtr)res_display);
 
 							double trueResult = 0;
 							double firstNumber = i == 2 
-								? Double.Parse(btn1.Key + "." + btn2.Key) 
+								? Double.Parse(btn1.Key + "," + btn2.Key) 
 								: i == 3 
-									? Double.Parse(btn1.Key + "." + btn2.Key) 
+									? Double.Parse(btn1.Key + "," + btn2.Key) 
 									: btn1.Key;
 							double secondNumber = i == 1 
-								? Double.Parse(btn2.Key + "." + btn1.Key) 
+								? Double.Parse(btn2.Key + "," + btn1.Key) 
 								: i == 3 
-									? Double.Parse(btn2.Key + "." + btn1.Key) 
+									? Double.Parse(btn2.Key + "," + btn1.Key) 
 									: btn2.Key;
 
 							if (operation.Key == "+")
@@ -133,32 +151,53 @@ namespace auto_tests
 							{
 								trueResult = Math.Round((double)(firstNumber * secondNumber), numberPrecision);
 							}
+							
+							
+							if (i == 4)
+							{
+								trueResult = i == 4 ? Math.Round((double)trueResult * numberForFourthItaration) : Math.Round((double)trueResult * numberForFourthItaration, numberPrecision);
+							}
 
-							double finalCalcRes = Math.Round(Double.Parse(calculatorResult), numberPrecision);
+							double finalCalcRes = i == 4 ? Math.Round(Double.Parse(calculatorResult.Replace('.', ','))): Math.Round(Double.Parse(calculatorResult.Replace('.', ',')), numberPrecision); ;
 							bool isEqual = finalCalcRes == trueResult;
 
-                            //if (!isEqual) {
-                            //	Console.WriteLine(
-                            //		isEqual
-                            //		+ "\t" +
-                            //		btn1.Key + " " + operation.Key + " " + secondNumber + " = " + calculatorResult.ToString()
-                            //		+ "\t" +
-                            //		btn1.Key + " " + operation.Key + " " + secondNumber + " = " + trueResult.ToString()
-                            //		+ "\n-------------------------------------------------------------------------------"
-                            //	);
-                            //}
-                            Console.WriteLine(
-                                isEqual
-                                + "\t" +
-								firstNumber + " " + operation.Key + " " + secondNumber + " = " + finalCalcRes.ToString()
-                                + "\t" +
-								firstNumber + " " + operation.Key + " " + secondNumber + " = " + trueResult.ToString()
-                                + "\n-------------------------------------------------------------------------------"
-                            );
-                        }
+
+
+							if (!isEqual)
+							{
+								errorCounter++;
+
+								//Console.WriteLine(
+								//	isEqual
+								//	+ "\t" +
+								//	btn1.Key + " " + operation.Key + " " + secondNumber + (i == 4 ? (" " + "*" + " " + numberForFourthItaration + " ") : "") + " = " + finalCalcRes.ToString()
+								//	+ "\t" +
+								//	btn1.Key + " " + operation.Key + " " + secondNumber + (i == 4 ? (" " + "*" + " " + numberForFourthItaration + " ") : "") + " = " + trueResult.ToString()
+								//	+ "\n-------------------------------------------------------------------------------");
+							}
+
+							Console.WriteLine(
+									isEqual
+									+ "\t" +
+									btn1.Key + " " + operation.Key + " " + secondNumber + (i == 4 ? (" " + "*" + " " + numberForFourthItaration + " ") : "") + " = " + finalCalcRes.ToString()
+									+ "\t" +
+									btn1.Key + " " + operation.Key + " " + secondNumber + (i == 4 ? (" " + "*" + " " + numberForFourthItaration + " ") : "") + " = " + trueResult.ToString()
+									+ "\n-------------------------------------------------------------------------------");
+						}
 					}
 				}
 			}
+
+
+			if (errorCounter == 0)
+			{
+				Console.WriteLine("Errors have not been found");
+			}
+			else
+			{
+				Console.WriteLine("Errors have been found - " + errorCounter);
+			}
+
 
 			Console.ReadLine();
 		}
