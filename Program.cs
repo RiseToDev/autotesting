@@ -76,7 +76,7 @@ namespace auto_tests
 			// Result
 			uint res_display = FindWindowEx(calc_window, 0, "TEdit", null);
 
-			const int numberPrecision = 3;
+			const int numberPrecision = 12;
 
 			int numberForFourthItaration = 0;
 			int errorCounter = 0;
@@ -138,28 +138,28 @@ namespace auto_tests
 
 							if (operation.Key == "+")
 							{
-								trueResult = Math.Round((double)(firstNumber + secondNumber), numberPrecision);
+								trueResult = i == 4 ? (double)(firstNumber + secondNumber) : Math.Round((double)(firstNumber + secondNumber), numberPrecision);
 							}
 							else if (operation.Key == "-")
 							{
-								trueResult = Math.Round((double)(firstNumber - secondNumber), numberPrecision);
+								trueResult = i == 4 ? (double)(firstNumber - secondNumber) : Math.Round((double)(firstNumber - secondNumber), numberPrecision);
 							}
 							else if (operation.Key == "/")
 							{
-								trueResult = Math.Round((double)(firstNumber / secondNumber), numberPrecision);
+								trueResult = i == 4 ? (double)(firstNumber / secondNumber) : Math.Round((double)(firstNumber / secondNumber), numberPrecision);
 							}
 							else if (operation.Key == "*")
 							{
-								trueResult = Math.Round((double)(firstNumber * secondNumber), numberPrecision);
+								trueResult = i == 4 ? (double)(firstNumber * secondNumber) : Math.Round((double)(firstNumber * secondNumber), numberPrecision);
 							}
 							
 							
 							if (i == 4)
 							{
-								trueResult = i == 4 ? Math.Round((double)trueResult * numberForFourthItaration) : Math.Round((double)trueResult * numberForFourthItaration, numberPrecision);
+								trueResult = Math.Round((double)trueResult * numberForFourthItaration, numberPrecision);
 							}
 
-							double finalCalcRes = i == 4 ? Math.Round(Double.Parse(calculatorResult.Replace('.', ','))): Math.Round(Double.Parse(calculatorResult.Replace('.', ',')), numberPrecision);
+							double finalCalcRes = Math.Round(Double.Parse(calculatorResult.Replace('.', ',')), numberPrecision);
 							bool isEqual = finalCalcRes == trueResult;
 
 
